@@ -1,0 +1,11 @@
+##data zipfile located in working directory
+data <- unzip("./exdata-data-household_power_consumption.zip")
+power <- read.table(data,sep=";",header=TRUE,na.strings="?",colClasses=c("character","character","numeric","numeric","numeric","numeric","numeric","numeric","numeric"))
+power$DateTime <- paste(power$Date,power$Time)
+Feb1_power <- subset(power, power$Date == "1/2/2007")
+Feb2_power <- subset(power,power$Date =="2/2/2007")
+Feb1_Feb2 <- rbind(Feb1_power,Feb2_power)
+Feb1_Feb2$DateTime <- strptime(Feb1_Feb2$DateTime,"%d/%m/%Y %H:%M:%S")
+png(filename="plot1.png",width=480,height=480)
+hist(Feb1_Feb2$Global_active_power,col="red",main="Global Active Power", xlab="Global Active Power (kilowatts)")
+dev.off()
